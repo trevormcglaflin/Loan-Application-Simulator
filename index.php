@@ -11,7 +11,13 @@
             href = "custom.css?version=<?php print time(); ?>"
             type="text/css">
     </head>
-<?php
+
+    <body>
+        <header>
+            <h1>McGlaflin & McGlaflin & Co</hl>
+        </header>
+        <main class = "grid-container">
+        <?php
 include 'constants.php';
 $isValidData = true;
 
@@ -57,27 +63,51 @@ if(isset($_POST['btnSubmit'])) {
         $isValidData = false;
     }
 
-    
-
-    
     # if the data is valid, call the python script to run the ML classification algorithm
     if ($isValidData) {
-    
-        $command  = escapeshellcmd('python3 classify.py ' . $age . " " . $income . " " . $empLength . " " . $amount . " " . $interest . " " . $yearsOfCredit);
-        
-        $output = $shell_exec($command);
-        echo $output;
-        
-        print '<p>' . $command . '</p>';
+        $create_user_info = shell_exec('touch user_info.csv');
+        $output = shell_exec('python classify.py ' . (string) $age . " " . (string) $income . " " . (string) $empLength . " " . (string) $amount . " " . (string) $interest . " " . (string) $yearsOfCredit);
+        $prediction = shell_exec('cat user_info.csv');
+        $clear_user_info = shell_exec('rm user_info.csv');
 
+        print $prediction;
+
+        if ($prediction == 1) {
+            print '<div class="grid-item2">';
+            print '<p id="rejected" class="grid-item2">' . "Application Rejected!!" . '</p>';
+            print '<figure><img src="rejected.gif" alt="rejected"></figure>';
+            print '</div>';
+        }
+
+        else {
+            print '<div class = "grid-item2">';
+            print '<p id = "accepted">' . "Application Accepted!!" . '</p>';
+            print '<figure><img src="approved.gif" alt="rejected"></figure>';
+            print '</div>';
+            $output2 = shell_exec('g++ -std=c++1y get_payment_data.cpp');
+            $output3 = shell_exec('./a.out ' . (string) $amount . ' 0 ' . (string) $interest*100 .  ' 12');
+            
+            $output4 = shell_exec("cat payment_schedule.csv");
+            
+            print '<table class="grid-item3">';
+            print '<tbody>';
+            $rows = explode("\n", $output4);
+            foreach ($rows as $row) {
+                print '<tr>';
+                $columns = explode(",", $row);
+                foreach ($columns as $column) {
+                    print '<td>' . $column . '</td>';
+                }
+                print '</tr>';
+            }
+
+            print '</tbody>';
+            print '</table>';
+        }
     }
 }
 ?>
-    <body>
-        <header>
-            <h1>McGlaflin & McGlaflin & Co</hl>
-        </header>
-        <div>
+        <div class="grid-item1">
             <h3>Personal Loan Application</h3>
             <form action="<?php print $_SERVER['PHP_SELF']; ?>" id="loanForm" method="post">
                 <p>
@@ -109,6 +139,7 @@ if(isset($_POST['btnSubmit'])) {
                 </p>
             </form>
         </div>
+        </main>
         <footer>
         <p>McGlaflin & McGlaflin & Co</p>
         <p>Email: trevor.mcglafin@uvm.edu</p>

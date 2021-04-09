@@ -4,12 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import sklearn
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 import csv
 import sys
+import time
 
 # retrieve command line arguments
 if len(sys.argv) == 7:
@@ -29,8 +31,6 @@ else:
     loan_percent_income = 5
     cred_hist_length = 9
     loan_percent_income = int(loan_amount)/int(income)
-
-print(loan_percent_income)
 
 # store information from csv file in pandas dataframe and remove rows containing null values
 # learned how to do this here: https://www.youtube.com/watch?v=mqI7xtlE2VU
@@ -57,10 +57,6 @@ neigh = KNeighborsClassifier(n_neighbors = k).fit(X_train,y_train)
 
 yhat = neigh.predict(X_test)
 
-# print accuracy scores
-print("Train set Accuracy: ", metrics.accuracy_score(y_train, neigh.predict(X_train)))
-print("Test set Accuracy: ", metrics.accuracy_score(y_test, yhat))
-
 # finally, predict the default value using the model
 
 # to do this, we must normalize the given independent variable to fit the data
@@ -75,8 +71,10 @@ with open('user_info.csv', mode='w') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(str(prediction))
 
+time.sleep(0.1)
 
 print(prediction)
+
 
 
 
