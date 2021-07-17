@@ -5,9 +5,6 @@ display that table to the user.
 
 this is hosted on a silk server, so to run the application go to this link: https://tmcglafl.w3.uvm.edu/cs120/M3OEP-MPL2-tmcglafl/
 
-There are a bunch of python packages that i used so if it doesn't work, I apologize. I'm not really sure what needs to be 
-on my computer and what needs to be on the server or if it matters.
-
 However, here are the python packages that I used:
 - numpy
 - pandas
@@ -15,6 +12,6 @@ However, here are the python packages that I used:
 - sys
 - csv
 
-I learned all of the machine learning stuff through an online class that I took through IBM EDX. 
+I learned all of the machine learning stuff through an online class that I took through IBM EDX. NOTE: due to some dependency issues
+it will automatically accept all applications if you go to the website. 
 
-Like I mention in my video, the cpp file was recycled from my first open ended project in this module.
